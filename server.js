@@ -5,15 +5,29 @@ const app = express();
 const port = process.env.PORT || 5000;
 const mongoose = require('mongoose');
 
-// Connect to MongoDB
-mongoose.createConnection(process.env.MONGODB_URI, {
+
+// Create a connection to MongoDB
+const dbConnection = mongoose.createConnection(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: 30000 // Increase the timeout to 30 seconds
-})
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.error('MongoDB connection error:', err));
+});
 
+// Handle connection events
+dbConnection.on('connected', () => {
+    console.log('MongoDB connected');
+});
+
+dbConnection.on('error', (err) => {
+    console.error('MongoDB connection error:', err);
+});
+
+dbConnection.on('disconnected', () => {
+    console.log('MongoDB disconnected');
+});
+
+// Export the connection object to use in other modules
+module.exports = dbConnection;
 
 app.use(express.json());
 
