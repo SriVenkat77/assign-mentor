@@ -6,7 +6,7 @@ const port = process.env.PORT || 5000;
 const mongoose = require('mongoose');
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
+mongoose.createConnection(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: 30000 // Increase the timeout to 30 seconds
